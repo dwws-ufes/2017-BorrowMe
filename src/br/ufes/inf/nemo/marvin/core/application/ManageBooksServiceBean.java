@@ -1,5 +1,6 @@
 package br.ufes.inf.nemo.marvin.core.application;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.security.PermitAll;
@@ -27,6 +28,14 @@ public class ManageBooksServiceBean extends CrudServiceBean<Book> implements Man
 	public BaseDAO<Book> getDAO() {
 		// TODO Auto-generated method stub
 		return bookDAO;
+	}
+	
+	
+	
+	@Override
+	protected Book validate(Book newEntity, Book oldEntity) {
+		// TODO Auto-generated method stub
+		return super.validate(newEntity, oldEntity);
 	}
 
 
