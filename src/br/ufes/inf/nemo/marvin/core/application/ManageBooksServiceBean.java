@@ -37,6 +37,8 @@ public class ManageBooksServiceBean extends CrudServiceBean<Book> implements Man
 		// TODO Auto-generated method stub
 		return super.validate(newEntity, oldEntity);
 	}
+	
+	
 
 
 

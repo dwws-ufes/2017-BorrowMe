@@ -1,7 +1,9 @@
 package br.ufes.inf.nemo.marvin.core.controller;
 
 import javax.ejb.EJB;
+import javax.ejb.Stateful;
 import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import br.ufes.inf.nemo.jbutler.ejb.application.CrudService;
@@ -31,6 +33,10 @@ public class ManageBooksController extends CrudController<Book> {
 	protected void initFilters() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	protected void suggestDescription(){
+		this.selectedEntity.setDescription("teste");
 	}
 	
 }

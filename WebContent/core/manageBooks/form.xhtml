@@ -30,15 +30,16 @@
 			<ui:decorate template="/resources/#{coreInfo.decorator}/formfield.xhtml">
 				<ui:param name="fieldName" value="title" />
 				<ui:param name="label" value="#{msgsCore['manageBooks.form.title']}" />
-				<p:inputText id="title" value="#{manageBooksController.selectedEntity.title}" required="true" pt:placeholder="#{msgsCore['manageBooks.form.title.placeholder']}" disabled="#{manageBooksController.readOnly}">
+				<p:inputText id="title" value="#{addBook.book.title}" required="true" pt:placeholder="#{msgsCore['manageBooks.form.title.placeholder']}" disabled="#{manageBooksController.readOnly}">
 					<p:ajax event="blur" update="titleField" />
+					<f:ajax event="blur" listener="#{addBook.suggestDescription}" execute="@this" render="description" />
 				</p:inputText>
 			</ui:decorate>
 			
 			<ui:decorate template="/resources/#{coreInfo.decorator}/formfield.xhtml">
 				<ui:param name="fieldName" value="description" />
 				<ui:param name="label" value="#{msgsCore['manageBooks.form.description']}" />
-				<p:inputText id="description" value="#{manageBooksController.selectedEntity.description}" required="true" pt:placeholder="#{msgsCore['manageBooks.form.description.placeholder']}" disabled="#{manageBooksController.readOnly}">
+				<p:inputText id="description" value="#{addBook.book.description}" required="true" pt:placeholder="#{msgsCore['manageBooks.form.description.placeholder']}" disabled="#{manageBooksController.readOnly}">
 					<p:ajax event="blur" update="descriptionField" />
 				</p:inputText>
 			</ui:decorate>
@@ -46,14 +47,14 @@
 			<h:panelGroup rendered="#{! manageBooksController.readOnly}">
 				<ui:decorate template="/resources/#{coreInfo.decorator}/formbuttonpanel-02.xhtml">
 					<p:commandButton id="cancelButton" action="#{manageBooksController.list}" value="#{msgs['jbutler.crud.button.cancel']}" immediate="true" icon="fa fa-fw fa-close" />
-					<p:commandButton id="saveButton" action="#{manageBooksController.save}" value="#{msgs['jbutler.crud.button.save']}" update=":form :globalMessages" icon="fa fa-fw fa-save" />
+					<p:commandButton id="saveButton" action="#{addBook.add}" value="#{msgs['jbutler.crud.button.save']}" update=":form :globalMessages" icon="fa fa-fw fa-save" />
 					<p:defaultCommand target="saveButton" />
 					<p:hotkey bind="#{msgs['jbutler.crud.hotkey.backToList']}" action="#{manageBooksController.list}" immediate="true" />
 				</ui:decorate>
 			</h:panelGroup>
 			<h:panelGroup rendered="#{manageBooksController.readOnly}">
 				<ui:decorate template="/resources/#{coreInfo.decorator}/formbuttonpanel-01.xhtml">
-					<p:commandButton id="backButton" action="#{manageBooksController.list}" value="#{msgs['jbutler.crud.button.back']}" immediate="true" icon="fa fa-fw fa-arrow-circle-left" />
+					<p:commandButton id="backButton" action="#{addBook.getBooks}" value="#{msgs['jbutler.crud.button.back']}" immediate="true" icon="fa fa-fw fa-arrow-circle-left" />
 					<p:hotkey bind="#{msgs['jbutler.crud.hotkey.backToList']}" action="#{manageBooksController.list}" immediate="true" />
 				</ui:decorate>
 			</h:panelGroup>

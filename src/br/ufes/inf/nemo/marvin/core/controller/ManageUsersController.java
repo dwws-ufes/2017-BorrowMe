@@ -33,4 +33,6 @@ public class ManageUsersController extends CrudController<User> {
 		addFilter(new LikeFilter("manageUsers.filter.byName", "name", getI18nMessage("msgsCore", "manageUsers.text.filter.byName")));
 		
 	}
+	
+	
 }
