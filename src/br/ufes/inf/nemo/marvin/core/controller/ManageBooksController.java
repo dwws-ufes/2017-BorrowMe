@@ -31,12 +31,8 @@ public class ManageBooksController extends CrudController<Book> {
 
 	@Override
 	protected void initFilters() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	protected void suggestDescription(){
-		this.selectedEntity.setDescription("teste");
+		addFilter(new LikeFilter("manageBooks.filter.byTitle", "title", getI18nMessage("msgsCore", "manageUsers.text.filter.byTitle")));
+		addFilter(new LikeFilter("manageBooks.filter.byGenre", "genre", getI18nMessage("msgsCore", "manageUsers.text.filter.byGenre")));
 	}
 	
 }

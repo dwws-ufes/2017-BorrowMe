@@ -35,6 +35,8 @@
 				<p:hotkey bind="#{msgs['jbutler.crud.hotkey.clearFilter']}" action="#{manageBooksController.cancelFilter}" process="@form" update=":listingForm @form" rendered="#{manageBooksController.filtering}" />
 				<p:hotkey bind="#{msgs['jbutler.crud.hotkey.clearFilter']}" action="#{manageBooksController.clearFilter}" process="@form" update=":listingForm @form" rendered="#{not manageBooksController.filtering}" />
 			</ui:decorate>
+			
+			
 		</h:panelGroup>
 		
 		<!-- The listing form. -->
@@ -59,6 +61,10 @@
 				<p:column headerText="#{msgsCore['manageBooks.form.title']}">
 					<h:outputText value="#{entity.title}" />
 				</p:column>
+				
+				<p:column headerText="#{msgsCore['manageBooks.form.genre']}">
+					<h:outputText value="#{entity.genre}" />
+				</p:column>
 
 				<p:ajax event="rowSelect" update=":listingForm:buttonsGroup" />
 				<p:ajax event="rowUnselect" update=":listingForm:buttonsGroup" />
@@ -80,6 +86,8 @@
 				<p:hotkey bind="#{msgs['jbutler.crud.hotkey.retrieve']}" action="#{manageBooksController.retrieve}" rendered="#{manageBooksController.selectedEntity != null}" />
 				<p:hotkey bind="#{msgs['jbutler.crud.hotkey.update']}" action="#{manageBooksController.update}" rendered="#{manageBooksController.selectedEntity != null}" />
 				<p:hotkey bind="#{msgs['jbutler.crud.hotkey.delete']}" action="#{manageBooksController.trash}" rendered="#{manageAcademicsController.selectedEntity != null}" process="@this" update=":listingForm:trashGroup" />
+			
+				<a style="float: right;" href="#{facesContext.externalContext.requestContextPath}/data/books">RDF/XML</a>
 			</h:panelGroup>
 
 			<!-- The trash panel: shows entities that have been selected for deletion. -->

@@ -33,14 +33,32 @@
 				<p:inputText id="title" value="#{addBook.book.title}" required="true" pt:placeholder="#{msgsCore['manageBooks.form.title.placeholder']}" disabled="#{manageBooksController.readOnly}">
 					<p:ajax event="blur" update="titleField" />
 					<f:ajax event="blur" listener="#{addBook.suggestDescription}" execute="@this" render="description" />
+					<f:ajax event="blur" listener="#{addBook.suggestAuthor}" execute="@this" render="author" />
+					<f:ajax event="blur" listener="#{addBook.suggestGenre}" execute="@this" render="genre" />
 				</p:inputText>
 			</ui:decorate>
 			
 			<ui:decorate template="/resources/#{coreInfo.decorator}/formfield.xhtml">
 				<ui:param name="fieldName" value="description" />
 				<ui:param name="label" value="#{msgsCore['manageBooks.form.description']}" />
-				<p:inputText id="description" value="#{addBook.book.description}" required="true" pt:placeholder="#{msgsCore['manageBooks.form.description.placeholder']}" disabled="#{manageBooksController.readOnly}">
+				<p:inputTextarea id="description" value="#{addBook.book.description}" pt:placeholder="#{msgsCore['manageBooks.form.description.placeholder']}" disabled="#{manageBooksController.readOnly}">
 					<p:ajax event="blur" update="descriptionField" />
+				</p:inputTextarea>
+			</ui:decorate>
+			
+			<ui:decorate template="/resources/#{coreInfo.decorator}/formfield.xhtml">
+				<ui:param name="fieldName" value="author" />
+				<ui:param name="label" value="#{msgsCore['manageBooks.form.author']}" />
+				<p:inputText id="author" value="#{addBook.book.author}" pt:placeholder="#{msgsCore['manageBooks.form.author.placeholder']}" disabled="#{manageBooksController.readOnly}">
+					<p:ajax event="blur" update="authorField" />
+				</p:inputText>
+			</ui:decorate>
+			
+			<ui:decorate template="/resources/#{coreInfo.decorator}/formfield.xhtml">
+				<ui:param name="fieldName" value="genre" />
+				<ui:param name="label" value="#{msgsCore['manageBooks.form.genre']}" />
+				<p:inputText id="genre" value="#{addBook.book.genre}" pt:placeholder="#{msgsCore['manageBooks.form.genre.placeholder']}" disabled="#{manageBooksController.readOnly}">
+					<p:ajax event="blur" update="genreField" />
 				</p:inputText>
 			</ui:decorate>
 
@@ -54,7 +72,7 @@
 			</h:panelGroup>
 			<h:panelGroup rendered="#{manageBooksController.readOnly}">
 				<ui:decorate template="/resources/#{coreInfo.decorator}/formbuttonpanel-01.xhtml">
-					<p:commandButton id="backButton" action="#{addBook.getBooks}" value="#{msgs['jbutler.crud.button.back']}" immediate="true" icon="fa fa-fw fa-arrow-circle-left" />
+					<p:commandButton id="backButton" action="#{manageBooksController.list}" value="#{msgs['jbutler.crud.button.back']}" immediate="true" icon="fa fa-fw fa-arrow-circle-left" />
 					<p:hotkey bind="#{msgs['jbutler.crud.hotkey.backToList']}" action="#{manageBooksController.list}" immediate="true" />
 				</ui:decorate>
 			</h:panelGroup>

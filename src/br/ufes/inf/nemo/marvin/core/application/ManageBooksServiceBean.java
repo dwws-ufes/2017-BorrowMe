@@ -30,6 +30,11 @@ public class ManageBooksServiceBean extends CrudServiceBean<Book> implements Man
 		return bookDAO;
 	}
 	
+	@Override
+	public Book retrieve(Long id) {
+		// TODO Auto-generated method stub
+		return super.retrieve(id);
+	}
 	
 	
 	@Override
@@ -37,6 +42,7 @@ public class ManageBooksServiceBean extends CrudServiceBean<Book> implements Man
 		// TODO Auto-generated method stub
 		return super.validate(newEntity, oldEntity);
 	}
+	
 	
 	
 

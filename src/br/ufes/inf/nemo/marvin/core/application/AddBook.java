@@ -1,7 +1,5 @@
 package br.ufes.inf.nemo.marvin.core.application;
 
-import java.text.DateFormat;
-import java.text.NumberFormat;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,9 +38,8 @@ public class AddBook {
 
 	@Inject
 	void loadPackages() {
-		System.out.println("entrou");
 		books = bookDAO.retrieveAll();
-		logger.log(Level.INFO, "Loading tour packages: {0} packages loaded", books.size());
+		logger.log(Level.INFO, "Loading books: {0} books loaded", books.size());
 
 	}
 
@@ -60,63 +57,85 @@ public class AddBook {
 		books.add(book);
 
 		FacesContext context = FacesContext.getCurrentInstance();
-		context.addMessage(null, new FacesMessage("Tour Package \"" + book.getTitle() + "\" added successfully!"));
+		context.addMessage(null, new FacesMessage("Book \"" + book.getTitle() + "\" added successfully!"));
 		book = new Book();
 		return null;
 	}
 	
 	public void suggestDescription() {
-		//book.setDescription("teste");
-//		String name = book.getTitle();
-//		if (name != null && name.length() > 3) {
-//			String query = "PREFIX dbpedia-owl: <http://dbpedia.org/ontology/> " +
-//					"PREFIX dbpprop: <http://dbpedia.org/property/> " +
-//					"SELECT ?desc " +
-//					"WHERE { " +
-//						"?x a dbpedia-owl:Place ; " +
-//						"dbpprop:name ?name ; " +
-//						"dbpedia-owl:abstract ?desc . " +
-//						"FILTER (lcase(str(?name)) = \"" + name.toLowerCase() + "\") " +
-//						"FILTER (langMatches(lang(?desc), \"EN\")) " +
-//					"}";
-//			
-//			QueryExecution queryExecution = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query);
-//			ResultSet results = queryExecution.execSelect();
-//			
-//			if (results.hasNext()) {
-//				QuerySolution querySolution = results.next();
-//				Literal literal = querySolution.getLiteral("desc");
-//				pack.setDescription("" + literal.getValue());
-//			}
-//		}
 		String title = book.getTitle();
-		String query = "PREFIX dbo: <http://dbpedia.org/ontology/>"+
-				"SELECT ?book ?author ?nameauthor ?title"+
+		String query =  "PREFIX dbo: <http://dbpedia.org/ontology/> "+
+						"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> "+
+						"PREFIX bibo: <http://purl.org/ontology/bibo/> "+
+						"SELECT ?book ?desc ?title"+
 						"WHERE{"+
-						"?book a dbo:Book;"+
-						"rdfs:label ?title;"+
-
-
-			"dbo:author ?author."+
-			"?author rdfs:label ?nameauthor"+
-
-			"FILTER(LANG(?title) = "+""+" || LANGMATCHES(LANG(?title), "+"en"+"))"+
-			"FILTER(LANG(?nameauthor) = "+""+" || LANGMATCHES(LANG(?nameauthor), "+"en"+"))"+
-
-			"FILTER(?title="+title+"@en)"+
-
-
-			"}"+
-
-			"LIMIT 10";
+							"?book a bibo:Book. "+
+							"?book rdfs:label ?title. "+
+							"?book dbo:abstract ?desc. "+
+							"FILTER(LANG(?title) = \"\" || LANGMATCHES(LANG(?title), \"en\")) "+
+							"FILTER(LANG(?desc) = \"\" || LANGMATCHES(LANG(?desc), \"en\")) "+
+							"FILTER(?title="+ "\"" + title + "\"" +"@en)"+
+						"}";
 		QueryExecution queryExecution = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query);
 		ResultSet results = queryExecution.execSelect();
 		
 		if (results.hasNext()) {
 			QuerySolution querySolution = results.next();
-			Literal literal = querySolution.getLiteral("authorname");
+			Literal literal = querySolution.getLiteral("desc");
 			book.setDescription("" + literal.getValue());
 		}
+		else book.setDescription("Not found");
+	}
+	
+	public void suggestAuthor(){
+		String title = book.getTitle();
+		String query =  "PREFIX dbo: <http://dbpedia.org/ontology/> "+
+						"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> "+
+						"PREFIX bibo: <http://purl.org/ontology/bibo/> "+
+						"SELECT ?book ?title ?author ?name " +
+						"WHERE{"+
+						"?book rdfs:label ?title. "+
+						"?book dbo:author ?author. "+
+						"?author rdfs:label ?name. " +
+						"FILTER(LANG(?title) = \"\" || LANGMATCHES(LANG(?title), \"en\")) "+
+						"FILTER(LANG(?name) = \"\" || LANGMATCHES(LANG(?name), \"en\")) "+
+						"FILTER(?title="+ "\"" + title + "\"" +"@en || ?title="+ "\"" + title + "\"" +"@pt)"+
+						"}";
+		QueryExecution queryExecution = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query);
+		ResultSet results = queryExecution.execSelect();
+		
+		if (results.hasNext()) {
+			QuerySolution querySolution = results.next();
+			Literal literal = querySolution.getLiteral("name");
+			book.setAuthor("" + literal.getValue());
+		}
+		else book.setAuthor("Not found");
+
+	}
+	
+	public void suggestGenre(){
+		String title = book.getTitle();
+		String query =  "PREFIX dbo: <http://dbpedia.org/ontology/> "+
+						"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> "+
+						"PREFIX bibo: <http://purl.org/ontology/bibo/> "+
+						"SELECT ?book ?title ?genre ?g " +
+						"WHERE{"+
+						"?book rdfs:label ?title. "+
+						"?book dbo:literaryGenre ?genre. " +
+						"?genre rdfs:label ?g. "+
+						"FILTER(LANG(?title) = \"\" || LANGMATCHES(LANG(?title), \"en\")) "+
+						"FILTER(?title="+ "\"" + title + "\"" +"@en)"+
+						"}";
+		QueryExecution queryExecution = QueryExecutionFactory.sparqlService("http://dbpedia.org/sparql", query);
+		ResultSet results = queryExecution.execSelect();
+		
+		if (results.hasNext()) {
+			QuerySolution querySolution = results.next();
+			Literal literal = querySolution.getLiteral("g");
+			book.setGenre("" + literal.getValue());
+		}
+		else book.setGenre("Not found");
+
 	}
 
 }
